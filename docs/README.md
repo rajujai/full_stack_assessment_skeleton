@@ -129,7 +129,11 @@ docker-compose -f docker-compose.initial.yml up --build -d
 
 ### solution
 
-> explain briefly your solution for this problem here
+> ## To solve this problem and normalize the data, we obviously have to create user and home tables and then establish a relationship between them.
+
+  - > `user` table - create a table name user with a primary_key `id` and unique `username` and `email address` although it's not necessory to make email and username unique but keeping it that will prevent the duplicate entries.
+  - > `home` table - create a table name home with a primary key id, remaining fields from `user_home` table
+  - > `user_home_rel` table - create a table to store relationship b/w user & home having user.id and home.id. This table will be used for relationship management.
 
 ## 2. React SPA
 
