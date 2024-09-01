@@ -4,7 +4,6 @@ import { Column, Entity, ManyToMany } from 'typeorm';
 
 @Entity({ name: 'home' })
 export class Home extends AbstractEntity {
-
   @ManyToMany(() => User, (user) => user.homes)
   users: User[];
 

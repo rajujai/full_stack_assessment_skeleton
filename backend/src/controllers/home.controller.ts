@@ -6,7 +6,7 @@ import { HomeService } from '@services/home.service';
 
 @Controller('home')
 export class HomeController {
-  constructor(private readonly service: HomeService) { }
+  constructor(private readonly service: HomeService) {}
 
   @Get('find-by-user')
   findByUser(

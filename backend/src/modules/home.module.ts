@@ -9,4 +9,4 @@ import { HomeService } from '@services/home.service';
   controllers: [HomeController],
   providers: [HomeService],
 })
-export class HomeModule { }
+export class HomeModule {}

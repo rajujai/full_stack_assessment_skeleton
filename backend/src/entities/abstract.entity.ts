@@ -2,11 +2,10 @@ import {
   BaseEntity,
   CreateDateColumn,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
 } from 'typeorm';
 
 export abstract class AbstractEntity extends BaseEntity {
-
   @PrimaryGeneratedColumn('uuid')
   id: number;
 

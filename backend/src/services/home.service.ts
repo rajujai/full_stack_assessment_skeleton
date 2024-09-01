@@ -1,17 +1,17 @@
+import { PageMetaDto } from '@dto/page-meta.dto';
+import { PageRequest } from '@dto/page-request.dto';
+import { PageDto } from '@dto/page.dto';
+import { Home } from '@entities/home.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PageMetaDto } from '@dtos/page-meta.dto';
-import { PageDto } from '@dtos/page.dto';
 import { Repository } from 'typeorm';
-import { Home } from '@entities/home.entity';
-import { PageRequest } from '@dtos/page-request.dto';
 
 @Injectable()
 export class HomeService {
   constructor(
     @InjectRepository(Home)
     private readonly repository: Repository<Home>,
-  ) { }
+  ) {}
 
   async findByUserId(
     userId: number,
@@ -22,7 +22,7 @@ export class HomeService {
       .leftJoin('home.users', 'user')
       .where('user.id = :userId', { userId });
     queryBuilder
-      .orderBy("user.createdAt", pageRequest.order)
+      .orderBy('user.createdAt', pageRequest.order)
       .skip(pageRequest.skip)
       .take(pageRequest.size);
 

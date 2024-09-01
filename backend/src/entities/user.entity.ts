@@ -4,7 +4,6 @@ import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 
 @Entity({ name: 'user' })
 export class User extends AbstractEntity {
-
   @ManyToMany(() => Home, (home) => home.users)
   @JoinTable({
     name: 'user_home_rel',
