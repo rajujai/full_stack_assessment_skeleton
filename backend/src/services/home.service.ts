@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PageMetaDto } from 'src/dtos/page-meta.dto';
-import { PageDto } from 'src/dtos/page.dto';
+import { PageMetaDto } from '@dtos/page-meta.dto';
+import { PageDto } from '@dtos/page.dto';
 import { Repository } from 'typeorm';
-import { PageRequest } from '../dtos/page-request.dto';
-import { Home } from '../entities/home.entity';
+import { Home } from '@entities/home.entity';
+import { PageRequest } from '@dtos/page-request.dto';
 
 @Injectable()
 export class HomeService {
   constructor(
     @InjectRepository(Home)
     private readonly repository: Repository<Home>,
-  ) {}
+  ) { }
 
   async findByUserId(
     userId: number,
@@ -22,7 +22,7 @@ export class HomeService {
       .leftJoin('home.users', 'user')
       .where('user.id = :userId', { userId });
     queryBuilder
-      // .orderBy("user.createdAt", pageRequest.order)
+      .orderBy("user.createdAt", pageRequest.order)
       .skip(pageRequest.skip)
       .take(pageRequest.size);
 
@@ -32,22 +32,29 @@ export class HomeService {
     return new PageDto(entities, pageMetaDto);
   }
 
-  async updateUsers(homeId: number, userIds: number[]): Promise<string> {
+  async updateUsers(homeId: number, userIds: number[]): Promise<Home> {
     const home: Home = await this.repository.findOne({
       where: { id: homeId },
       relations: { users: true },
     });
+    if (!home) {
+      throw new Error('Home not found');
+    }
     const existingUserIds = home.users.map((user) => user.id);
-    const userIdsToremove = existingUserIds.filter(
+    const userIdsToRemove = existingUserIds.filter(
       (id) => !userIds.includes(id),
     );
     const userIdsToAdd = userIds.filter((id) => !existingUserIds.includes(id));
-
-    this.repository
-      .createQueryBuilder()
-      .relation(Home, 'users')
-      .of(homeId)
-      .addAndRemove(userIdsToAdd, userIdsToremove);
-    return 'Users updated in home ' + homeId;
+    if (userIdsToAdd.length > 0 || userIdsToRemove.length > 0) {
+      await this.repository
+        .createQueryBuilder()
+        .relation(Home, 'users')
+        .of(homeId)
+        .addAndRemove(userIdsToAdd, userIdsToRemove);
+    }
+    return this.repository.findOne({
+      where: { id: homeId },
+      relations: { users: true },
+    });
   }
 }

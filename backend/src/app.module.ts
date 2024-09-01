@@ -1,11 +1,11 @@
+import { AppController } from '@controllers/app.controller';
+import { Home } from '@entities/home.entity';
+import { User } from '@entities/user.entity';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppService } from './services/app.service';
-import { Home } from './entities/home.entity';
-import { User } from './entities/user.entity';
-import { UserModule } from './modules/user.module';
-import { AppController } from './controllers/app.controller';
+import { AppService } from '@services/app.service';
 import { HomeModule } from './modules/home.module';
+import { UserModule } from './modules/user.module';
 
 @Module({
   imports: [
@@ -26,4 +26,4 @@ import { HomeModule } from './modules/home.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

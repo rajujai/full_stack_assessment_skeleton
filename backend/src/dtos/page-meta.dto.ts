@@ -1,5 +1,5 @@
+import { PageRequest } from '@dto/page-request.dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { PageRequest } from './page-request.dto';
 
 export interface PageMetaDtoParameters {
   pageRequest: PageRequest;

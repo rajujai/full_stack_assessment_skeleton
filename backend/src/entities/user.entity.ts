@@ -1,9 +1,10 @@
-import { AbstractEntity } from 'src/entities/abstract.entity';
-import { Home } from 'src/entities/home.entity';
+import { AbstractEntity } from '@entities/abstract.entity';
+import { Home } from '@entities/home.entity';
 import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 
 @Entity({ name: 'user' })
 export class User extends AbstractEntity {
+
   @ManyToMany(() => Home, (home) => home.users)
   @JoinTable({
     name: 'user_home_rel',

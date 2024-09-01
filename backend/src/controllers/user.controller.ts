@@ -1,10 +1,10 @@
+import { User } from '@entities/user.entity';
 import { Controller, Get, Query } from '@nestjs/common';
-import { User } from 'src/entities/user.entity';
-import { UserService } from 'src/services/user.service';
+import { UserService } from '@services/user.service';
 
 @Controller('user')
 export class UserController {
-  constructor(private service: UserService) {}
+  constructor(private service: UserService) { }
 
   @Get('all')
   findAll(): Promise<User[]> {
