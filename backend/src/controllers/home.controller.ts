@@ -4,7 +4,7 @@ import { Home } from '@entities/home.entity';
 import { Body, Controller, Get, Param, Put, Query } from '@nestjs/common';
 import { HomeService } from '@services/home.service';
 
-@Controller('home')
+@Controller('api/homes')
 export class HomeController {
   constructor(private readonly service: HomeService) {}
 
