@@ -4,6 +4,7 @@ import { PageDto } from '@dto/page.dto';
 import { Home } from '@entities/home.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { log } from 'console';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -24,10 +25,10 @@ export class HomeService {
     queryBuilder
       .orderBy('user.createdAt', pageRequest.order)
       .skip(pageRequest.skip)
-      .take(pageRequest.size);
+      .limit(pageRequest.size);
 
     const itemCount = await queryBuilder.getCount();
-    const entities = await queryBuilder.getRawMany();
+    const entities = await queryBuilder.getMany();
     const pageMetaDto = new PageMetaDto({ itemCount, pageRequest });
     return new PageDto(entities, pageMetaDto);
   }
