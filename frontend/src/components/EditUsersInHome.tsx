@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import {
   resetEditingHomeId,
@@ -13,6 +14,7 @@ import { UpdateUsersInHomePayload } from "../services/types";
 import "../styles/editUsersInHome.css";
 
 export default function EditUsersInHome({ homeId = 0, homeAddress = "" }) {
+  const [saveButtonState, setSaveButtonState] = useState(false);
   const dispatch = useDispatch();
   const { data: users, isLoading } = useGetUsersByHomeIdQuery(homeId);
   const [updateUsersInHome, { isLoading: updatingUsers, isSuccess, isError }] =
@@ -20,7 +22,12 @@ export default function EditUsersInHome({ homeId = 0, homeAddress = "" }) {
   const allUsers = useAppSelector((state) => state.user.users);
   const selectedUsers = new Set(users?.map((user) => user.id));
   const updateCheckbox = (id: number) => {
+    console.log("1",selectedUsers);
     selectedUsers.has(id) ? selectedUsers.delete(id) : selectedUsers.add(id);
+    // selectedUsers.size === 0
+    //   ? setSaveButtonState(false)
+    //   : setSaveButtonState(true);
+    //   console.log("2",selectedUsers);
   };
   const saveUsers = async () => {
     try {
@@ -40,8 +47,6 @@ export default function EditUsersInHome({ homeId = 0, homeAddress = "" }) {
     dispatch(resetEditingHomeId());
     dispatch(resetHome());
   };
-
-  console.log(users, selectedUsers);
   return (
     <div className="edit-users p-2">
       {isLoading ? (
@@ -65,7 +70,11 @@ export default function EditUsersInHome({ homeId = 0, homeAddress = "" }) {
           {isSuccess && <p>Home updated successfully!</p>}
           {isError && <p>Error updating home!</p>}
           <div className="grid grid-cols-2 gap-2">
-            <button onClick={saveUsers} disabled={updatingUsers}>
+            <button
+              className="disabled:opacity-75 disabled:hover:cursor-not-allowedd"
+              onClick={saveUsers}
+              disabled={saveButtonState || updatingUsers}
+            >
               {isLoading ? "Saving..." : "Save"}
             </button>
             <button onClick={cancelEditing}>Cancel</button>

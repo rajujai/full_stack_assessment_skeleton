@@ -224,7 +224,7 @@ docker-compose -f docker-compose.initial.yml up --build -d
 
 ### solution
 
-> explain briefly your solution for this problem here
+for this fronted task I have used reactjs with vite typescript, tailwind.css, redux toolkit, rtk query
 
 ## 3. Backend API development on Node
 
@@ -285,7 +285,8 @@ docker-compose -f docker-compose.initial.yml up --build -d
 
 ### solution
 
-> explain briefly your solution for this problem here
+for this backend task I have used nestjs with typescript, typeorm 
+exposing all the mentioned endpoints as described
 
 ## Submission Guidelines
 
