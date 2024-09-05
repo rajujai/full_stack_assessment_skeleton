@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { updateHomeEditMode } from "../redux/slice/homeSlice";
+import "react-loading-skeleton/dist/skeleton.css";
+import { resetEditingHomeId } from "../redux/slice/homeSlice";
 import { doSelectUser } from "../redux/slice/userSlice";
 import { useAppDispatch } from "../redux/store";
 import { useGetAllUsersQuery } from "../services/api";
@@ -15,34 +16,36 @@ export default function UserSelector() {
     users?.forEach((user) => {
       if (user.id === Number(selectedUserId)) {
         dispatch(doSelectUser(user));
-        dispatch(updateHomeEditMode(false));
+        dispatch(resetEditingHomeId());
       }
     });
   };
 
   return (
-    <>
+    <div className="absolute w-full top-1 left-0">
       {" "}
       {isLoading ? (
-        <div>Loading...</div>
+        <div className="loader text-center">Loading...</div>
       ) : (
-        <select
-          id="user-selector"
-          value={selectUser}
-          onChange={handleSelectUser}
-        >
-          <option value="" disabled>
-            Select User
-          </option>
-          {users?.map(({ id, username }) => {
-            return (
-              <option key={id} value={id}>
-                {username}
-              </option>
-            );
-          })}
-        </select>
+        <div className="relative text-right mr-5 p-2 text-xl">
+          <select
+            id="user-selector"
+            value={selectUser}
+            onChange={handleSelectUser}
+          >
+            <option value="" disabled>
+              Select User
+            </option>
+            {users?.map(({ id, username }) => {
+              return (
+                <option key={id} value={id}>
+                  {username}
+                </option>
+              );
+            })}
+          </select>
+        </div>
       )}
-    </>
+    </div>
   );
 }

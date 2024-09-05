@@ -12,8 +12,10 @@ export default function App() {
   }, [selectUser]);
   return (
     <>
-      <UserSelector />
-      {showHomes && <Homes userId={selectUser?.id} />}
+      <div id="container" className="container font-medium">
+        <UserSelector />
+        {showHomes && <Homes userId={selectUser?.id} username={selectUser?.username} />}
+      </div>
     </>
   );
 }

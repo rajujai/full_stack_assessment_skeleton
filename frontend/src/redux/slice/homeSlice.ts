@@ -1,23 +1,26 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface HomeState {
-    homeEditMode: boolean
+    editingHomeId: number | null
 }
 
 const initialState: HomeState = {
-    homeEditMode: false
+    editingHomeId: null
 }
 
 export const homeSlice = createSlice({
     name: 'home',
     initialState,
     reducers: {
-        updateHomeEditMode: (state, action: PayloadAction<boolean>) => {
-            state.homeEditMode = action.payload;
+        updateEditingHomeId: (state, action: PayloadAction<number>) => {
+            state.editingHomeId = action.payload;
+        },
+        resetEditingHomeId: (state) =>{
+            state.editingHomeId = null;
         }
     }
 })
 
-export const {updateHomeEditMode} = homeSlice.actions;
+export const {updateEditingHomeId, resetEditingHomeId} = homeSlice.actions;
 
 export default homeSlice.reducer;

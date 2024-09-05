@@ -1,13 +1,14 @@
 import { useDispatch } from "react-redux";
-import { updateHomeEditMode } from "../redux/slice/homeSlice";
+import { resetEditingHomeId } from "../redux/slice/homeSlice";
 import { useAppSelector } from "../redux/store";
+import "../styles/editUsersInHome.css"
 import {
   useGetUsersByHomeIdQuery,
   useUpdateUsersInHomeMutation,
 } from "../services/api";
 import { UpdateUsersInHomePayload } from "../services/types";
 
-export default function EditUsersInHome({ homeId = 0 }) {
+export default function EditUsersInHome({ homeId = 0, homeAddress = "" }) {
   const dispatch = useDispatch();
   const { data: users, isLoading } = useGetUsersByHomeIdQuery(homeId);
   const [updateUsersInHome, { isLoading: updatingUsers, isSuccess, isError }] =
@@ -31,33 +32,37 @@ export default function EditUsersInHome({ homeId = 0 }) {
       console.log("error", err);
     }
   };
-  const cancelEditing = () => dispatch(updateHomeEditMode(false));
+  const cancelEditing = () => dispatch(resetEditingHomeId());
   return (
-    <>
+    <div className="edit-users p-2">
       {isLoading ? (
         <div>Loading...</div>
       ) : (
-        <div>
-          {isSuccess ? setTimeout(() => cancelEditing(), 1000) : null}
+        <div className="w-1/4 min-w-fit flex justify-center flex-col">
+          <p className="text-xl">Update users associated with {homeAddress}</p>
+          {isSuccess ? setTimeout(() => cancelEditing(), 5000) : null}
           {allUsers?.map(({ id, username }) => (
-            <div key={id}>
+            <div key={id} className="grid grid-cols-2 p-3 text-2xl">
               <input
+                className="w-6 mx-auto"
                 type="checkbox"
                 id={`${id}`}
                 defaultChecked={selectedUsers?.includes(id)}
                 onChange={() => updateCheckbox(id)}
               />
-              <h3>{username}</h3>
+              <h2 className="">{username}</h2>
             </div>
           ))}
           {isSuccess && <p>Home updated successfully!</p>}
           {isError && <p>Error updating home!</p>}
-          <button onClick={saveUsers} disabled={updatingUsers}>
-            {isLoading ? "Saving..." : "Save"}
-          </button>
-          <button onClick={cancelEditing}>Cancel</button>
+          <div className="grid grid-cols-2 gap-2">
+            <button onClick={saveUsers} disabled={updatingUsers}>
+              {isLoading ? "Saving..." : "Save"}
+            </button>
+            <button onClick={cancelEditing}>Cancel</button>
+          </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
