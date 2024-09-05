@@ -1,12 +1,16 @@
 import { useDispatch } from "react-redux";
-import { resetEditingHomeId } from "../redux/slice/homeSlice";
+import {
+  resetEditingHomeId,
+  resetHome,
+  updateHome,
+} from "../redux/slice/homeSlice";
 import { useAppSelector } from "../redux/store";
-import "../styles/editUsersInHome.css"
 import {
   useGetUsersByHomeIdQuery,
   useUpdateUsersInHomeMutation,
 } from "../services/api";
 import { UpdateUsersInHomePayload } from "../services/types";
+import "../styles/editUsersInHome.css";
 
 export default function EditUsersInHome({ homeId = 0, homeAddress = "" }) {
   const dispatch = useDispatch();
@@ -14,25 +18,30 @@ export default function EditUsersInHome({ homeId = 0, homeAddress = "" }) {
   const [updateUsersInHome, { isLoading: updatingUsers, isSuccess, isError }] =
     useUpdateUsersInHomeMutation();
   const allUsers = useAppSelector((state) => state.user.users);
-  const selectedUsers = users?.map((user) => user.id);
+  const selectedUsers = new Set(users?.map((user) => user.id));
   const updateCheckbox = (id: number) => {
-    selectedUsers?.includes(id)
-      ? selectedUsers.filter((_id) => _id !== id)
-      : selectedUsers?.push(id);
+    selectedUsers.has(id) ? selectedUsers.delete(id) : selectedUsers.add(id);
   };
   const saveUsers = async () => {
     try {
       const payload: UpdateUsersInHomePayload = {
         homeId: homeId,
-        userIds: selectedUsers,
+        userIds: Array.from(selectedUsers),
       };
       const updatedHome = await updateUsersInHome(payload).unwrap();
-      console.log("updatedHome", updatedHome);
+      selectedUsers.clear();
+      updatedHome.users?.forEach((user) => selectedUsers.add(user.id));
+      dispatch(updateHome(updatedHome));
     } catch (err) {
       console.log("error", err);
     }
   };
-  const cancelEditing = () => dispatch(resetEditingHomeId());
+  const cancelEditing = () => {
+    dispatch(resetEditingHomeId());
+    dispatch(resetHome());
+  };
+
+  console.log(users, selectedUsers);
   return (
     <div className="edit-users p-2">
       {isLoading ? (
@@ -47,7 +56,7 @@ export default function EditUsersInHome({ homeId = 0, homeAddress = "" }) {
                 className="w-6 mx-auto"
                 type="checkbox"
                 id={`${id}`}
-                defaultChecked={selectedUsers?.includes(id)}
+                defaultChecked={selectedUsers.has(id)}
                 onChange={() => updateCheckbox(id)}
               />
               <h2 className="">{username}</h2>

@@ -35,3 +35,9 @@ export interface UpdateUsersInHomePayload {
     homeId: number;
     userIds: number[] | undefined;
 }
+
+export interface HomesPageRequest {
+    userId: number,
+    pageNo: number,
+    pageSize?: number
+}

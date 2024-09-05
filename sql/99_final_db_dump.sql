@@ -63,3 +63,17 @@ FROM
 -- #5 deletes the user_home table 
 DROP TABLE IF EXISTS `user_home`;
 
+ALTER TABLE
+  `user`
+ADD
+  `created_at` TIMESTAMP,
+ADD
+  `last_updated` TIMESTAMP;
+
+
+ALTER TABLE
+  `home`
+ADD
+  `created_at` TIMESTAMP,
+ADD
+  `last_updated` TIMESTAMP;
